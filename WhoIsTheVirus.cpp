@@ -27,6 +27,7 @@
 #include <Platform.hpp>
 #include "bdate.hpp"
 #include "NameClass.hpp"
+#include "Users.hpp"
 
 using namespace std;
 using namespace Virus;
@@ -38,8 +39,13 @@ int main(int c, char** args) {
 	QCol->Write(qColor::LightBlue, "Coded by: Tricky\n");
 	QCol->Write(qColor::LightMagenta, "Build date: " + string(BuildDate) + "\n");
 	QCol->Doing("Platform", Platform());
-	QCol->Doing("ColorDrv", QCol->Name);
+	QCol->Doing("ColorDrv", QCol->Name);	
 	QCol->Write(qColor::White, "(c) Jeroen P. Broks, released under the terms of the GPL3\n\n");
+	if (User::Login(c, args)->Okay) {
+
+	} else {
+		QCol->Error("Login failed");
+	}
 	QCol->Reset();
 	NameClass::NewAll();
 
