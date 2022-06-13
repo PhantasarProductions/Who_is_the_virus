@@ -60,12 +60,18 @@
     <ClCompile Include="..\TrickyUnits\Source\QCol.cpp">
       <Filter>Source Files\Units</Filter>
     </ClCompile>
+    <ClCompile Include="Users.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Names.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="NameClass.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Users.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
