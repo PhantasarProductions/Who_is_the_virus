@@ -1,0 +1,8 @@
+x64
+.vs
+MKL_*
+*.MKL.*
+*.exe
+*.obj
+bdate.hpp
+
