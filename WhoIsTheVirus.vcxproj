@@ -156,11 +156,13 @@
     <ClCompile Include="..\TrickyUnits\Source\TrickySTOI.cpp" />
     <ClCompile Include="..\TrickyUnits\Source\TrickyTime.cpp" />
     <ClCompile Include="NameClass.cpp" />
+    <ClCompile Include="Users.cpp" />
     <ClCompile Include="WhoIsTheVirus.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="NameClass.hpp" />
     <ClInclude Include="Names.hpp" />
+    <ClInclude Include="Users.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
