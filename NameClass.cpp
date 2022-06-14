@@ -67,6 +67,8 @@ namespace Virus {
 	std::string NameClass::Name() { return _name; }
 	size_t NameClass::Names() { return Lijst.size(); }
 	NameClass NameClass::RandomName() {	return Register[Lijst[TRand(0, Names() - 1)]]; }
+	bool NameClass::Boy() {		return _gender==Gender::Boy;	}
+	bool NameClass::Girl() { return _gender == Gender::Girl; }
 	std::string NameClass::CName() { return Upper(_name); }
 
 	int NameClass::Letters() { return _name.size(); }

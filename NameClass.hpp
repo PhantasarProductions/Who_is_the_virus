@@ -56,6 +56,8 @@ namespace Virus {
 		static NameClass RandomName();
 		std::string Name();
 		std::string CName();
+		bool Boy();
+		bool Girl();
 		int Letters();
 		bool Even();
 		bool Odd();
