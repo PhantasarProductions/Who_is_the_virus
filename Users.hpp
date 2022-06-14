@@ -51,6 +51,10 @@ namespace Virus {
 		void Failed(int nv);
 		int Score();
 		void Score(int nv);
+		int Forfeit();
+		void Forfeit(int nv);
+		int Average();
+		std::string MyName();
 
 
 		static shUser Login(int c, char** args);

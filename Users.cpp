@@ -41,10 +41,11 @@ namespace Virus {
 	bool User::Loaded{ false };
 
 	std::string User::SetHash() {
-		return md5("WITV_" + _Data.Value(Name, "Sessions") + "." + _Data.Value(Name, "Sucess") + "." + _Data.Value(Name, "Failed") + "." + _Data.Value(Name, "Score") + "_WITV");
+		return md5("WITV_" + _Data.Value(Name, "Sessions") + "." + _Data.Value(Name, "Sucess") + "." + _Data.Value(Name, "Failed") + "." + _Data.Value(Name, "Forfeit") + "." + _Data.Value(Name, "Score") + "_WITV");
 	}
 
 	void User::UHash() {
+		//QCol->Doing("Updating", "Hash (debug)"); // DEBUG Only!
 		_Data.Value(Name, "Check", SetHash());
 	}
 
@@ -99,6 +100,20 @@ namespace Virus {
 		_Data.Value(Name, "Score", Score() + nv);
 		UHash();
 	}
+
+	int User::Forfeit() { return ToInt(_Data.Value(Name, "Forfeit")); }
+
+	void User::Forfeit(int nv) {
+		_Data.Value(Name, "Forfeit", Forfeit() + nv);
+		UHash();
+	}
+
+	int User::Average() {
+		if (Sessions() == 0) return 0;
+		return floor(Score() / Sessions());		
+	}
+
+	string User::MyName() { return Name; }
 	
 	shUser User::Login(int c, char** args) {
 		shUser Ret{ nullptr };
