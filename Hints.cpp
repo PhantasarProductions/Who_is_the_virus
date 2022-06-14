@@ -112,7 +112,11 @@ namespace Virus {
 		}
 		return "";
 	}
-	static string LastLetter2(Session S, File* F, File* Chk) { return string("The virus does not start with the letter " + F->VUP[F->VUP.size() - 1]); }
+	static string LastLetter2(Session S, File* F, File* Chk) { 
+		char ret[255];
+		sprintf_s(ret,"The virus does not start with the letter '%c'" , F->VUP[F->VUP.size() - 1]); 
+		return ret;
+	}
 	static string LastLetter3(Session S, File* F, File* Chk) {
 		if (Vowel(F->VUP[F->VUP.size() - 1]))
 			return "The last letter of the virus is not a vowel";
@@ -306,7 +310,8 @@ namespace Virus {
 		if (ret.size() && ret[0] >= 65 && ret[0] <= 90) return ret;
 #ifdef HINTDEBUG
 		static map<uint16, uint16>times{};
-		Chat("Unwanted outcome (" << r << ")('" << ret << "') (This function did so "<<(++times[r]) << "x)");
+		if (ret.size())
+			Chat("Unwanted outcome (" << r << ")('" << ret << "') (This function did so " << (++times[r]) << "x)");
 #endif
 		return ""; // Likely faulty
 	}
