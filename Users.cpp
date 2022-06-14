@@ -21,11 +21,13 @@
 // Please note that some references to data like pictures or audio, do not automatically
 // fall under this licenses. Mostly this is noted in the respective files.
 // 
-// Version: 22.06.13
+// Version: 22.06.14
 // EndLic
 #include "Users.hpp"
 #include <Dirry.hpp>
 #include <QCol.hpp>
+#include <MD5.hpp>
+#include <TrickySTOI.hpp>
 
 using namespace TrickyUnits;
 using namespace std;
@@ -37,6 +39,14 @@ namespace Virus {
 	string User::GFile() { return Dirry("$AppSupport$/WhoIsTheVirus_Users.ini"); }
 	shUser User::Current{nullptr};
 	bool User::Loaded{ false };
+
+	std::string User::SetHash() {
+		return md5("WITV_" + _Data.Value(Name, "Sessions") + "." + _Data.Value(Name, "Sucess") + "." + _Data.Value(Name, "Failed") + "." + _Data.Value(Name, "Score") + "_WITV");
+	}
+
+	void User::UHash() {
+		_Data.Value(Name, "Check", SetHash());
+	}
 
 	shUser User::GetCurrent() { return Current; }
 
@@ -55,8 +65,41 @@ namespace Virus {
 			QCol->Doing("New user", n);
 			_Data.Value(n, "Password", pw);
 		}
-		Okay = pw == Password();
+		if (Sessions() == 0) UHash();
+		Okay = pw == Password() && SetHash()==_Data.Value(Name,"Check");
 	}
+	int User::Sessions() {
+		return ToInt(_Data.Value(Name,"Sessions"));
+	}
+	void User::Sessions(int nv) {
+		_Data.Value(Name, "Sessions", to_string(nv+Sessions()));
+		UHash();
+	}
+	int User::Succeed() {
+		return ToInt(_Data.Value(Name, "Success"));
+	}
+	void User::Success(int nv) {
+		_Data.Value(Name, "Success", to_string(nv + Succeed()));
+		UHash();
+	}
+	int User::Failed() {
+		return ToInt(_Data.Value(Name, "Failed"));
+	}
+
+	void User::Failed(int nv) {
+		_Data.Value(Name, "Failed", Failed() + nv);
+		UHash();
+	}
+
+	int User::Score() {
+		return ToInt(_Data.Value(Name, "Score"));
+	}
+
+	void User::Score(int nv) {
+		_Data.Value(Name, "Score", Score() + nv);
+		UHash();
+	}
+	
 	shUser User::Login(int c, char** args) {
 		shUser Ret{ nullptr };
 		switch (c) {
@@ -75,6 +118,7 @@ namespace Virus {
 			string p;
 			QCol->Doing("Username", args[1]);
 			QCol->Doing("Password", "", "");
+			cin >> p;
 			return Login(args[1], p);
 		}
 		break;

@@ -21,10 +21,11 @@
 // Please note that some references to data like pictures or audio, do not automatically
 // fall under this licenses. Mostly this is noted in the respective files.
 // 
-// Version: 22.06.13
+// Version: 22.06.14
 // EndLic
 #pragma once
 #include <GINIE.hpp>
+
 namespace Virus {
 	class User; typedef std::shared_ptr<User> shUser;
 
@@ -34,12 +35,22 @@ namespace Virus {
 		static bool Loaded;
 		static std::string GFile();
 		static shUser Current;
-		std::string Name{ "" };		
+		std::string Name{ "" };	
+		std::string SetHash();
+		void UHash();
 	public:
 		static shUser GetCurrent();
 		bool Okay{ false };
 		std::string Password();
 		User(std::string n, std:: string pw);
+		int Sessions();
+		void Sessions(int nv);
+		int Succeed();
+		void Success(int nv);
+		int Failed();
+		void Failed(int nv);
+		int Score();
+		void Score(int nv);
 
 
 		static shUser Login(int c, char** args);
