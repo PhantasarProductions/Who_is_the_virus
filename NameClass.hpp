@@ -21,7 +21,7 @@
 // Please note that some references to data like pictures or audio, do not automatically
 // fall under this licenses. Mostly this is noted in the respective files.
 // 
-// Version: 22.06.13
+// Version: 22.06.14
 // EndLic
 #pragma once
 #include <map>
@@ -52,6 +52,8 @@ namespace Virus {
 		static void NewGirl(std::string n);
 		static void NewCh(std::string n, Gender g);
 		static void NewAll();
+		static size_t Names();
+		static NameClass RandomName();
 		std::string Name();
 		std::string CName();
 		int Letters();

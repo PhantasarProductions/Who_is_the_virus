@@ -21,7 +21,7 @@
 // Please note that some references to data like pictures or audio, do not automatically
 // fall under this licenses. Mostly this is noted in the respective files.
 // 
-// Version: 22.06.13
+// Version: 22.06.14
 // EndLic
 #undef NC_Debug
 
@@ -30,6 +30,7 @@
 #include "NameClass.hpp"
 #include "Names.hpp"
 #include <QuickString.hpp>
+#include <TRandom.hpp>
 
 #ifdef NC_Debug
 #include <iostream>
@@ -64,6 +65,8 @@ namespace Virus {
 	}
 
 	std::string NameClass::Name() { return _name; }
+	size_t NameClass::Names() { return Lijst.size(); }
+	NameClass NameClass::RandomName() {	return Register[Lijst[TRand(0, Names() - 1)]]; }
 	std::string NameClass::CName() { return Upper(_name); }
 
 	int NameClass::Letters() { return _name.size(); }
