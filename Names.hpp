@@ -21,7 +21,7 @@
 // Please note that some references to data like pictures or audio, do not automatically
 // fall under this licenses. Mostly this is noted in the respective files.
 // 
-// Version: 22.06.13
+// Version: 22.06.14
 // EndLic
 #pragma once
 namespace Virus {
@@ -57,6 +57,7 @@ namespace Virus {
                 "Everell",
                 "Felix",
                 "Ferdinand",
+                "Ferdy",
                 "Fernando",
                 "Fred",
                 "Freddie",
@@ -104,6 +105,7 @@ namespace Virus {
                 "Marco",
                 "Marc",
                 "Marcel",
+                "Marnix",
                 "Mustafa",
                 "Neville",
                 "Nino",
@@ -168,6 +170,7 @@ namespace Virus {
                 "Angelina",
                 "Angelique",
                 "Antoinette",
+                "Anita",
                 "Bertha",
                 "Bella",
                 "Belle",
