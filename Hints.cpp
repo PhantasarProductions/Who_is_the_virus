@@ -29,6 +29,15 @@
 #include "Session.hpp"
 #include "NameClass.hpp"
 
+#define HINTDEBUG
+
+
+#ifdef HINTDEBUG
+#define Chat(a) std::cout<<"HINTDEBUG!\t"<<a<<std::endl;
+#else
+#define Chat(a)
+#endif
+
 using namespace std;
 using namespace TrickyUnits;
 
@@ -66,11 +75,19 @@ namespace Virus {
 		auto l{ (char)TRand(65,90) };
 		auto f{ F->VUP[0] };
 		if (l != f) {
-			return string("The virus starts with the letter " + l);
+			//return string("The virus starts with the letter " + l);
+			char ret[255];
+			sprintf_s(ret, "The virus starts with the letter '%c'", l);
+			return ret;
 		}
 		return "";
 	}
-	static string FirstLetter2(Session S, File* F, File* Chk) { return string("The virus does not start with the letter " + F->VUP[0]); }
+	static string FirstLetter2(Session S, File* F, File* Chk) { 
+		char ret[200];
+		sprintf_s(ret, "The virus does not start with the letter '%c'", F->VUP[0]);
+		//return string("The virus does not start with the letter " + F->VUP[0]); 
+		return ret;
+	}
 	static string FirstLetter3(Session S, File* F, File* Chk) {
 		if (Vowel(F->VUP[0]))
 			return "The first letter of the virus is not a vowel";
@@ -88,7 +105,10 @@ namespace Virus {
 		auto l{ (char)TRand(65,90) };
 		auto f{ F->VUP[F->VUP.size() - 1] };
 		if (l != f) {
-			return string("The virus starts with the letter " + l);
+			//return string("The virus ends with the letter " + l);
+			char ret[255];
+			sprintf_s(ret, "The virus ends with the letter '%c'", l);
+			return ret;
 		}
 		return "";
 	}
@@ -123,6 +143,20 @@ namespace Virus {
 			sprintf_s(r, "The virus contains %d letters", n);
 		return r;
 	}
+	static string Num2(Session S, File* F, File* Chk) {
+		uint32 m{ 0 };
+		for (auto FL : S->Files) m = max<uint32>(m, FL.second.VUP.size());
+		if (m < 3) return "";
+		uint32 n{ (uint32)TRand(3, m) };
+		char r[200];
+		if (F->VUP.size() >= n)
+			sprintf_s(r, "The virus contains less than %d letters", n);
+		else if (F->VUP.size() <= n)
+			sprintf_s(r, "The virus contains more than %d letters", n);
+		else
+			return "";
+		return r;
+	}
 	static string Even(Session S, File* F, File* Chk) {
 		if (F->VUP.size() % 2 == 0)
 			return "The number of letters in the name of the virus is odd";
@@ -155,9 +189,9 @@ namespace Virus {
 	}
 	static string SameAsVirus3(Session S, File* F, File* Chk) {
 		if (F->VUP.size() == Chk->VUP.size())
-			return "I don't have the name number of letters in my name as the virus does";
+			return "I don't have the same number of letters in my name as the virus does";
 		else
-			return "I have the name number of letters in my name as the virus does";
+			return "I have the same number of letters in my name as the virus does";
 	}
 	static string Jeroen(Session S, File* F, File* Chk) {
 		if (F->VUP == "JEROEN") return "";
@@ -172,25 +206,31 @@ namespace Virus {
 
 	static string Contain(Session S, File* F, File* chk) {
 		auto c = (char)TRand(65, 90);
-		auto t = (byte)TRand(1, 2);
+		auto t = (byte)TRand(1, 7);
 		uint16 found{ 0 };
 		uint16 ml = (uint16)TRand(0, F->VUP.size());
 		for (uint16 i = 0; i < F->VUP.size(); i++) {
 			if (F->VUP[i] == c) found++;
 		}
 		switch (t) {
-		case 2:
-			if (ml != found) {
+		case 1:
+			if (ml == found) {
 				char ret[200];
-				sprintf_s(ret, "The letter %s can be found %d times in the name of the virus", c, ml);
+				sprintf_s(ret, "The letter '%c' can not be found %d times in the name of the virus", c, ml);
 				return ret;
 			}
 			// NO BREAK! FALLTHROUGH INTENDED!!!
-		case 1:
+		case 2:
+		case 3:
+		case 4:
 			if (found)
-				return string("The virus does not contain the latter ") + c;
+				return string("The virus does not contain the letter " + c);
 			else
-				return string("The virus does contain the letter ") + c;
+				return string("The virus does contain the letter " + c);
+		case 5:
+		case 6:
+		case 7:
+			return "";
 		default:
 			return "The *is* no virus in this game"; // Just a useless hint, but this situation should not occur.
 		}
@@ -198,20 +238,47 @@ namespace Virus {
 	}
 	static string IAm(Session, File*, File*) { return "I am the virus"; }
 
+	static string Second(Session S, File* V, File* C) {
+		auto ch{ (char)TRand(65,90) };
+		if (V->VUP[1] == ch) {
+			return string("The second letter in the name of the virus is not a " + ch);
+		} else {
+			return string("The second letter in the name of the virus is a " + ch);
+		}
+	}
+	static string Boy(Session, File* V, File*) {
+		if (V->Stuff.Boy())
+			return("The virus does not have a boy's name");
+		else
+			return("The virus has a boy's name");
+	}
+	static string Girl(Session, File* V, File*) {
+		if (V->Stuff.Girl())
+			return("The virus does not have a girl's name");
+		else
+			return("The virus has a girl's name");
+	}
+
 	static vector<FHint> Hint{
-		UselessHint1,
-		UselessHint2,
-		UselessHint3, // Actually the best hint in there, but that's within in the scope of the game... useless.
-		FirstLetter1,
-		FirstLetter2,
+		UselessHint1, // 0
+		UselessHint1, // 1
+		UselessHint2, // 2
+		UselessHint3, // 3 // Actually the best hint in there, but that's within in the scope of the game... useless.
+		FirstLetter1, // 4
+		FirstLetter1, // 5
+		FirstLetter2, // 6
 		FirstLetter3,
 		FirstLetter4,
+		Second,
+		Second,
 		LastLetter1,
 		LastLetter2,
 		LastLetter3,
 		LastLetter4,
 		FirstAndLast,
 		Num,
+		Num2,
+		Num2, // Just increase the chance this happens
 		Even,
 		Same,
 		SameAsVirus1,
@@ -219,6 +286,8 @@ namespace Virus {
 		SameAsVirus3,
 		Jeroen,
 		Point,
+		Boy,
+		Girl,
 		Contain,
 		IAm
 	};
@@ -226,7 +295,13 @@ namespace Virus {
 
 	string GetHint(Session Ses, File* VFile, File* CFile) {
 		auto r = TRand(0,Hint.size() - 1);
-		return Hint[r](Ses, VFile, CFile);
+		auto ret{ Hint[r](Ses, VFile, CFile) };
+		if (ret.size() && ret[0] >= 65 && ret[0] <= 90) return ret;
+#ifdef HINTDEBUG
+		static map<uint16, uint16>times{};
+		Chat("Unwanted outcome (" << r << ")('" << ret << "') (This function did so "<<(++times[r]) << "x)");
+#endif
+		return ""; // Likely faulty
 	}
 
 }
