@@ -127,9 +127,9 @@ namespace Virus {
 	}
 	static string FirstAndLast(Session S, File* F, File* Chk) {
 		if (F->VUP[0] == F->VUP[F->VUP.size() - 1])
-			return "The first letter of the virus is not the same as the letter of the virus";
+			return "The first letter of my virus is not the same as the last letter of the virus";
 		else
-			return "The first letter of the virus is the same as the letter of the virus";
+			return "The first letter of the virus is the same as the last letter of the virus";
 	}
 	static string Num(Session S, File* F, File* Chk) {
 		uint32 m{ 0 };
@@ -208,7 +208,7 @@ namespace Virus {
 		auto c = (char)TRand(65, 90);
 		auto t = (byte)TRand(1, 7);
 		uint16 found{ 0 };
-		uint16 ml = (uint16)TRand(0, F->VUP.size());
+		uint16 ml = (uint16)TRand(2, F->VUP.size());
 		for (uint16 i = 0; i < F->VUP.size(); i++) {
 			if (F->VUP[i] == c) found++;
 		}
@@ -222,11 +222,14 @@ namespace Virus {
 			// NO BREAK! FALLTHROUGH INTENDED!!!
 		case 2:
 		case 3:
-		case 4:
+		case 4: {
+			char ret[255];
 			if (found)
-				return string("The virus does not contain the letter " + c);
+				sprintf_s(ret, "The virus does not contain the letter '%c'", c);
 			else
-				return string("The virus does contain the letter " + c);
+				sprintf_s(ret, "The virus does contain the letter '%c'" , c);
+			return ret;
+		}
 		case 5:
 		case 6:
 		case 7:
@@ -240,23 +243,27 @@ namespace Virus {
 
 	static string Second(Session S, File* V, File* C) {
 		auto ch{ (char)TRand(65,90) };
+		//char fmt[255];
+		char ret[255];
 		if (V->VUP[1] == ch) {
-			return string("The second letter in the name of the virus is not a " + ch);
+			sprintf_s(ret, 255,"The second letter in the name of the virus is not a '%c'",ch);
 		} else {
-			return string("The second letter in the name of the virus is a " + ch);
+			sprintf_s(ret, 255,"The second letter in the name of the virus is a '%c'", ch);
 		}
+		//sprintf_s(ret, fmt, ch);
+		return ret;
 	}
 	static string Boy(Session, File* V, File*) {
 		if (V->Stuff.Boy())
-			return("The virus does not have a boy's name");
+			return "The virus does not have a boy's name";
 		else
-			return("The virus has a boy's name");
+			return "The virus has a boy's name";
 	}
 	static string Girl(Session, File* V, File*) {
 		if (V->Stuff.Girl())
-			return("The virus does not have a girl's name");
+			return "The virus does not have a girl's name";
 		else
-			return("The virus has a girl's name");
+			return "The virus has a girl's name";
 	}
 
 	static vector<FHint> Hint{
@@ -267,28 +274,28 @@ namespace Virus {
 		FirstLetter1, // 4
 		FirstLetter1, // 5
 		FirstLetter2, // 6
-		FirstLetter3,
-		FirstLetter4,
-		Second,
-		Second,
-		LastLetter1,
-		LastLetter2,
-		LastLetter3,
-		LastLetter4,
-		FirstAndLast,
-		Num,
-		Num2,
-		Num2, // Just increase the chance this happens
-		Even,
-		Same,
-		SameAsVirus1,
-		SameAsVirus2,
-		SameAsVirus3,
-		Jeroen,
-		Point,
-		Boy,
-		Girl,
-		Contain,
+		FirstLetter3, // 7
+		FirstLetter4, // 8
+		Second, // 9
+		Second, // 10
+		LastLetter1, // 11
+		LastLetter2, // 12
+		LastLetter3, // 13
+		LastLetter4, // 14
+		FirstAndLast, // 15
+		Num, // 16
+		Num2, // 17
+		Num2, // 18 // Just increase the chance this happens
+		Even, // 19
+		Same, // 20
+		SameAsVirus1, // 21
+		SameAsVirus2, // 22
+		SameAsVirus3, // 23
+		Jeroen, // 24
+		Point, // 25
+		Boy, // 26
+		Girl, // 27
+		Contain, // 28
 		IAm
 	};
 
