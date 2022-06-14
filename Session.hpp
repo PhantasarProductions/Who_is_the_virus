@@ -28,6 +28,8 @@
 #include <map>
 #include <memory>
 #include <QuickTypes.hpp>
+#include "NameClass.hpp"
+#include "Users.hpp"
 
 namespace Virus {
 
@@ -35,18 +37,30 @@ namespace Virus {
 		std::string VUP{};
 		std::string ShowName{};
 		std::string Aanwijzing{};
-		Gender Sex;
+		NameClass Stuff{};
+		bool Seen{ false };
 		bool IsVirus{ false };
 	};
 
 	class TSession; typedef std::shared_ptr<TSession> Session;
 
 	class TSession {
+		std::shared_ptr<User> SessionUser{ nullptr };
+		void Dir(std::vector<std::string> p);
 	public:
 		std::map<std::string, File> Files{};
 		TrickyUnits::uint32 FilesTried{ 0 };
 		TrickyUnits::uint32 FilesDeleted{ 0 };
 		TrickyUnits::uint32 Score();
-		Session Create(TrickyUnits::uint32 Files = 100);
+		static Session Create(TrickyUnits::uint32 Files = 100);
+		static std::string SesFile(std::string User);
+		std::string SesFile();
+		static bool HasSession(std::string User);
+		bool HasSession();
+		static Session Load(std::string User);
+		void Save();
+		void Run();
 	};
+
+
 }
