@@ -23,6 +23,7 @@
 // 
 // Version: 22.06.15
 // EndLic
+
 #include <map>
 #include <QCol.hpp>
 #include <Medals.hpp>
