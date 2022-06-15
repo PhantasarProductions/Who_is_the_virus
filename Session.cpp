@@ -38,7 +38,7 @@
 #include "Users.hpp"
 #include "Ach.hpp"
 
-#define DEBUGMODE
+#undef DEBUGMODE
 
 using namespace std;
 using namespace TrickyUnits;
