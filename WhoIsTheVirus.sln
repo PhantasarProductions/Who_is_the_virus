@@ -5,6 +5,8 @@ VisualStudioVersion = 17.1.32407.343
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "WhoIsTheVirus", "WhoIsTheVirus.vcxproj", "{00CF35FB-52EC-4FFA-9E19-8814C584C5A2}"
 EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Setup1", "Release\Inst_src\Setup1\Setup1.vdproj", "{68BAC034-5F0C-4086-93D8-60636AFC579C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -21,6 +23,10 @@ Global
 		{00CF35FB-52EC-4FFA-9E19-8814C584C5A2}.Release|x64.Build.0 = Release|x64
 		{00CF35FB-52EC-4FFA-9E19-8814C584C5A2}.Release|x86.ActiveCfg = Release|Win32
 		{00CF35FB-52EC-4FFA-9E19-8814C584C5A2}.Release|x86.Build.0 = Release|Win32
+		{68BAC034-5F0C-4086-93D8-60636AFC579C}.Debug|x64.ActiveCfg = Debug
+		{68BAC034-5F0C-4086-93D8-60636AFC579C}.Debug|x86.ActiveCfg = Debug
+		{68BAC034-5F0C-4086-93D8-60636AFC579C}.Release|x64.ActiveCfg = Release
+		{68BAC034-5F0C-4086-93D8-60636AFC579C}.Release|x86.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
