@@ -1,3 +1,5 @@
+Release/Exe/*
+*.msi
 x64
 .vs
 MKL_*
