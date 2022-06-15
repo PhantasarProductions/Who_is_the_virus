@@ -19,6 +19,15 @@
     <Filter Include="Header Files\Units">
       <UniqueIdentifier>{10ef9490-5000-46a9-b8d3-ce4b80a1c8a8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Medals">
+      <UniqueIdentifier>{c6256cf4-8f0b-4065-acae-07be43cb765f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Medals\JCR6">
+      <UniqueIdentifier>{910b1be0-55d7-40d5-aa52-743de7eb79b5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Medals">
+      <UniqueIdentifier>{081cf2ed-f41f-493d-bfd0-2c95ad789322}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="WhoIsTheVirus.cpp">
@@ -72,6 +81,18 @@
     <ClCompile Include="Hints.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Ach.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Medals\Medals.cpp">
+      <Filter>Source Files\Medals</Filter>
+    </ClCompile>
+    <ClCompile Include="..\JCR6\src\jcr6_core.cpp">
+      <Filter>Source Files\Medals\JCR6</Filter>
+    </ClCompile>
+    <ClCompile Include="..\TrickyUnits\Source\GetHTTP.cpp">
+      <Filter>Source Files\Units</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Names.hpp">
@@ -106,6 +127,12 @@
     </ClInclude>
     <ClInclude Include="..\TrickyUnits\Headers\QCol.hpp">
       <Filter>Header Files\Units</Filter>
+    </ClInclude>
+    <ClInclude Include="Ach.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Medals\Medals.hpp">
+      <Filter>Header Files\Medals</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
