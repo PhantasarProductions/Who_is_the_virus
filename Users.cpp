@@ -21,13 +21,14 @@
 // Please note that some references to data like pictures or audio, do not automatically
 // fall under this licenses. Mostly this is noted in the respective files.
 // 
-// Version: 22.06.14
+// Version: 22.06.15
 // EndLic
 #include "Users.hpp"
 #include <Dirry.hpp>
 #include <QCol.hpp>
 #include <MD5.hpp>
 #include <TrickySTOI.hpp>
+#include <TrickyTime.hpp>
 
 using namespace TrickyUnits;
 using namespace std;
@@ -114,6 +115,17 @@ namespace Virus {
 	}
 
 	string User::MyName() { return Name; }
+
+	void User::Award(std::string a, std::string v) { _Data.Value(Name, "AWARD_" + a, v); }
+
+	bool User::Award(std::string a) {
+		return _Data.HasValue(Name, "AWARD_" + a);
+	}
+
+	std::string User::Awarded(std::string a) {
+		if (!Award(a)) return "";
+		return _Data.Value(Name, "AWARD_" + a);
+	}
 	
 	shUser User::Login(int c, char** args) {
 		shUser Ret{ nullptr };

@@ -21,7 +21,7 @@
 // Please note that some references to data like pictures or audio, do not automatically
 // fall under this licenses. Mostly this is noted in the respective files.
 // 
-// Version: 22.06.14
+// Version: 22.06.15
 // EndLic
 #pragma once
 #include <GINIE.hpp>
@@ -55,6 +55,11 @@ namespace Virus {
 		void Forfeit(int nv);
 		int Average();
 		std::string MyName();
+		void Award(std::string a,std::string v);
+		bool Award(std::string a);
+		std::string Awarded(std::string a);
+
+
 
 
 		static shUser Login(int c, char** args);
