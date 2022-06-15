@@ -21,7 +21,7 @@
 // Please note that some references to data like pictures or audio, do not automatically
 // fall under this licenses. Mostly this is noted in the respective files.
 // 
-// Version: 22.06.14
+// Version: 22.06.15
 // EndLic
 #include <string>
 #include <QCol.hpp>
@@ -30,6 +30,8 @@
 #include <FileList.hpp>
 #include <TrickySTOI.hpp>
 #include <QuickString.hpp>
+#include <Platform.hpp>
+#include <QuickStream.hpp>
 #include "Session.hpp"
 #include "NameClass.hpp"
 #include "Users.hpp"
@@ -95,7 +97,7 @@ namespace Virus {
 		cout << endl;
 	}
 
-	uint32 TSession::Score() { return FilesTried + (FilesDeleted * 10); }
+	//uint32 TSession::Score() { return FilesTried + (FilesDeleted * 10); }
 
 	Session TSession::Create(uint32 Files) {
 		if (Files < 25) { QCol->Error("A session must have at least 25 files"); return nullptr; }
@@ -155,15 +157,39 @@ namespace Virus {
 	}
 
 	void TSession::Save() {
-		QCol->Error("Saving sessions not yet implemented");
+		QCol->Doing("Saving", "Session");
+		auto bt = WriteFile(SesFile());
+		bt->Write("Who is the Virus?\x1a",true);
+		map<uint32, File> tmp;
+		for (auto f : Files) {
+			uint64 r; do { r = TRand(4294967200); } while(tmp.count(r));
+			tmp[r] = f.second;
+			bt->Write((byte)1);			
+			bt->Write((byte)f.second.Stuff.Boy());
+			bt->Write(f.second.Stuff.Name());
+			bt->Write(r);
+		}
+		for (auto f : tmp) {
+			bt->Write((byte)2);
+			bt->Write(f.first);
+			bt->Write((byte)3);
+			bt->Write(f.second.Aanwijzing);
+			bt->Write((byte)4);
+			bt->Write((byte)f.second.IsVirus);
+			bt->Write((byte)5);
+			bt->Write((byte)f.second.Seen);
+		}
+		bt->Write((byte)6); bt->Write(Score);
+		bt->Write((byte)7); bt->Write(Deleted);
+		bt->Write((byte)8); bt->Write(FilesWatched);
+		bt->Write((byte)0);
+		bt->Close();
+		//QCol->Error("Saving sessions not yet implemented");
 	}
 
 
 
 	void TSession::Run() {
-		uint16 Score{ 0 };
-		uint16 Deleted{ 0 };
-		uint16 FilesWatched{ 0 };
 		QCol->Write(qColor::Yellow, "Type \"");
 		QCol->Write(qColor::Green, "HELP");
 		QCol->Write(qColor::Yellow, "\" for help.\n\n");
@@ -214,6 +240,24 @@ namespace Virus {
 					Score += 100;
 					Deleted++;
 				}
+			} else if (s[0] == "FORFEIT") {
+				QCol->Color(qColor::Red, qColor::Black);
+				cout << "Session forfeit\n\n";
+				Score += 100;
+				SessionUser->Sessions(1);
+				SessionUser->Score(Score);
+				SessionUser->Forfeit(1);
+				return;
+			} else if (s[0] == "CLS") {
+#ifdef Tricky_Windows
+				system("cls");
+#else
+				system("clear");
+#endif
+				// Is there really not a BETTER method to do this?
+			} else if (s[0]=="EXIT" && s[0] == "BYE") {
+				Save();
+				exit(0);
 			} else if (Files.count(s[0])) {
 				if (Files[s[0]].IsVirus) {
 					QCol->Color(qColor::Red, qColor::Black);
@@ -230,7 +274,7 @@ namespace Virus {
 					FilesWatched++;
 				}
 				QCol->Write(qColor::Yellow, Files[s[0]].Aanwijzing);
-				cout << endl;
+				cout << endl;			
 			} else {
 				QCol->Error("Bad command or file name");
 			}

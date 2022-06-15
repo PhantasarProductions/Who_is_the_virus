@@ -21,7 +21,7 @@
 // Please note that some references to data like pictures or audio, do not automatically
 // fall under this licenses. Mostly this is noted in the respective files.
 // 
-// Version: 22.06.14
+// Version: 22.06.15
 // EndLic
 #pragma once
 #include <string>
@@ -47,11 +47,15 @@ namespace Virus {
 	class TSession {
 		std::shared_ptr<User> SessionUser{ nullptr };
 		void Dir(std::vector<std::string> p);
+		TrickyUnits::uint16 Score{ 0 };
+		TrickyUnits::uint16 Deleted{ 0 };
+		TrickyUnits::uint16 FilesWatched{ 0 };
+
 	public:
 		std::map<std::string, File> Files{};
-		TrickyUnits::uint32 FilesTried{ 0 };
-		TrickyUnits::uint32 FilesDeleted{ 0 };
-		TrickyUnits::uint32 Score();
+		//TrickyUnits::uint32 FilesTried{ 0 };
+		//TrickyUnits::uint32 FilesDeleted{ 0 };
+		//TrickyUnits::uint32 Score();
 		static Session Create(TrickyUnits::uint32 Files = 100);
 		static std::string SesFile(std::string User);
 		std::string SesFile();
