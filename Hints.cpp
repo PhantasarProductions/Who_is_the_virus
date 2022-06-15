@@ -29,7 +29,7 @@
 #include "Session.hpp"
 #include "NameClass.hpp"
 
-#define HINTDEBUG
+#undef HINTDEBUG
 
 
 #ifdef HINTDEBUG
@@ -114,7 +114,7 @@ namespace Virus {
 	}
 	static string LastLetter2(Session S, File* F, File* Chk) { 
 		char ret[255];
-		sprintf_s(ret,"The virus does not start with the letter '%c'" , F->VUP[F->VUP.size() - 1]); 
+		sprintf_s(ret,"The virus does not end with the letter '%c'" , F->VUP[F->VUP.size() - 1]); 
 		return ret;
 	}
 	static string LastLetter3(Session S, File* F, File* Chk) {
