@@ -32,9 +32,11 @@
 #include <QuickString.hpp>
 #include <Platform.hpp>
 #include <QuickStream.hpp>
+#include <OpenURL.hpp>
 #include "Session.hpp"
 #include "NameClass.hpp"
 #include "Users.hpp"
+#include "Ach.hpp"
 
 #define DEBUGMODE
 
@@ -154,7 +156,7 @@ namespace Virus {
 	Session TSession::Load(std::string User) {
 #ifdef DEBUGMODE
 		QCol->Doing("Loading", SesFile(User));
-		
+
 #else
 		QCol->Doing("Loading", "Session");
 #endif
@@ -246,11 +248,11 @@ namespace Virus {
 			}
 		} while (!bt->EndOfFile());
 		bt->Close();
-		QCol->Green("Success!\n");
 		if (!FileDelete(SesFile(User))) {
 			QCol->Error("Sorry! No go if this didn't go right!");
 			return nullptr;
 		}
+		QCol->Green("Success!\n");
 		//QCol->Error("Loading sessions not yet implemented");
 		return ret;
 	}
@@ -262,15 +264,15 @@ namespace Virus {
 		QCol->Doing("Saving", "Session");
 #endif
 		auto bt = WriteFile(SesFile());
-		bt->Write("Who is the Virus?\x1a",true);
+		bt->Write("Who is the Virus?\x1a", true);
 		map<uint64, File> tmp;
 		for (auto f : Files) {
-			uint64 r; do { r = abs(TRand(65535)); } while(tmp.count(r));
+			uint64 r; do { r = abs(TRand(65535)); } while (tmp.count(r));
 #ifdef DEBUGMODE
 			cout << "Name \"" << f.second.Stuff.Name() << "\" assinged to ID#" << r << endl;
 #endif
 			tmp[r] = f.second;
-			bt->Write((byte)1);			
+			bt->Write((byte)1);
 			bt->Write((byte)f.second.Stuff.Boy());
 			bt->Write(f.second.Stuff.Name());
 			bt->Write(r);
@@ -338,6 +340,11 @@ namespace Virus {
 					QCol->Doing("Forfeit", SessionUser->Forfeit());
 					QCol->Doing("Total Score", SessionUser->Score());
 					QCol->Doing("Average", SessionUser->Average());
+					Award("VICTOR");
+					if (Score <= 10) Award("ILOVEYOU");
+					if (Score <= 30) Award("DATACRIME1");
+					if (Score <= 60) Award("DATACRIME2");
+					if (Score <= 120) Award("TAIPAN");
 					return;
 				} else {
 					Files.erase(s[1]);
@@ -354,6 +361,7 @@ namespace Virus {
 				SessionUser->Sessions(1);
 				SessionUser->Score(Score);
 				SessionUser->Forfeit(1);
+				Award("DOODLE");
 				return;
 			} else if (s[0] == "CLS") {
 #ifdef Tricky_Windows
@@ -362,12 +370,16 @@ namespace Virus {
 				system("clear");
 #endif
 				// Is there really not a BETTER method to do this?
-			} else if (s[0]=="EXIT" || s[0] == "BYE") {
+			} else if (s[0] == "EXIT" || s[0] == "BYE") {
 				Save();
-				QCol->Doing("Logging out","Goodbye");
+				QCol->Doing("Logging out", "Goodbye");
 				QCol->Reset();
-				exit(0); 
-			} else if (Files.count(s[0])) {
+				exit(0);
+			} else if (s[0] == "HELP")
+				OpenURL("https://github.com/PhantasarProductions/Who_is_the_virus/wiki");
+			else if (s[0] == "ACH")
+				Overzicht();
+			else if (Files.count(s[0])) {
 				if (Files[s[0]].IsVirus) {
 					QCol->Color(qColor::Red, qColor::Black);
 					cout << "I AM THE VIRUS!!!!\n\nYOUR ENTIRE SYSTEM HAS BEEN DELETED\n\nGAME OVER!!\n\n";
@@ -375,6 +387,7 @@ namespace Virus {
 					SessionUser->Sessions(1);
 					SessionUser->Score(Score);
 					SessionUser->Failed(1);
+					Award("MICHELANGELO");
 					return;
 				}
 				if (!Files[s[0]].Seen) {
@@ -383,7 +396,7 @@ namespace Virus {
 					FilesWatched++;
 				}
 				QCol->Write(qColor::Yellow, Files[s[0]].Aanwijzing);
-				cout << endl;			
+				cout << endl;
 			} else {
 				QCol->Error("Bad command or file name");
 			}
