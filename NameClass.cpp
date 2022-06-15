@@ -31,6 +31,7 @@
 #include "Names.hpp"
 #include <QuickString.hpp>
 #include <TRandom.hpp>
+#include <QCol.hpp>
 
 #ifdef NC_Debug
 #include <iostream>
@@ -67,6 +68,16 @@ namespace Virus {
 	std::string NameClass::Name() { return _name; }
 	size_t NameClass::Names() { return Lijst.size(); }
 	NameClass NameClass::RandomName() {	return Register[Lijst[TRand(0, Names() - 1)]]; }
+
+	NameClass NameClass::GetName(std::string n) {
+		auto name = Upper(n);
+		if (!Register.count(name)) {
+			QCol->Error("Unregistered name (" + n + ") requested!");
+			exit(1);
+		}
+		return Register[name];
+	}
+
 	bool NameClass::Boy() {		return _gender==Gender::Boy;	}
 	bool NameClass::Girl() { return _gender == Gender::Girl; }
 	std::string NameClass::CName() { return Upper(_name); }

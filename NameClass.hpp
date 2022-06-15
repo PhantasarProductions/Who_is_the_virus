@@ -54,6 +54,7 @@ namespace Virus {
 		static void NewAll();
 		static size_t Names();
 		static NameClass RandomName();
+		static NameClass GetName(std::string n);
 		std::string Name();
 		std::string CName();
 		bool Boy();

@@ -147,22 +147,128 @@ namespace Virus {
 		}
 		return ret;
 	}
-	std::string TSession::SesFile(std::string User) { return Dirry("$AppSupport$/Session_" + User + "WITV_Session"); }
-	std::string TSession::SesFile() { return SessionUser->MyName(); }
+	std::string TSession::SesFile(std::string User) { return Dirry("$AppSupport$/Session_" + User + ".WITV_Session"); }
+	std::string TSession::SesFile() { return SesFile(SessionUser->MyName()); }
 	bool TSession::HasSession(std::string User) { return IsFile(SesFile(User)); }
 	bool TSession::HasSession() { return HasSession(SessionUser->MyName()); }
 	Session TSession::Load(std::string User) {
-		QCol->Error("Loading sessions not yet implemented");
-		return nullptr;
+#ifdef DEBUGMODE
+		QCol->Doing("Loading", SesFile(User));
+		
+#else
+		QCol->Doing("Loading", "Session");
+#endif
+		auto bt = ReadFile(SesFile(User));
+#ifdef DEBUGMODE
+		cout << "Session file size: " << bt->Size() << endl;
+#endif
+		{
+			byte fuckyou;
+			do {
+				fuckyou = bt->ReadByte();
+#ifdef DEBUGMODE
+				cout << fuckyou;
+#endif // DEBUGMODE
+
+				if (bt->EndOfFile()) { QCol->Error("Invalid file!"); return nullptr; }
+			} while (fuckyou != 0x1a);
+		}
+#ifdef DEBUGMODE
+		cout << "\t Check!\n";
+#endif // DEBUGMODE
+		if (User::GetCurrent()->MyName() != User) { QCol->Error("User mismatch! Expect some trouble"); }
+		auto ret = make_shared<TSession>();
+		ret->SessionUser = User::GetCurrent();
+		map<uint64, string> ID{};
+		uint64 useID{ 0 };
+		string useName = "";
+		do {
+			auto tag = bt->ReadByte();
+#ifdef DEBUGMODE
+			cout << "Loading!\t tag=" << (int)tag << endl;
+#endif
+			if (!tag) break;
+			switch (tag) {
+			case 1: {
+				auto boy = (bool)bt->ReadByte();
+				auto Name = bt->ReadString();
+				auto IDid = bt->ReadUInt64();
+#ifdef DEBUGMODE
+				cout << "Adding name: " << Name << " (" << IDid << ")\n";
+#endif
+				ID[IDid] = Upper(Name);
+				auto N = NameClass::GetName(Name);
+				File F;
+				F.IsVirus = false;
+				F.Aanwijzing = "No hint yet. (If you see this message, please report it!)";
+				F.ShowName = N.Name();
+				F.VUP = N.CName();
+				F.Stuff = N;
+				ret->Files[N.CName()] = F;
+			}
+				  break;
+			case 2:
+				useID = bt->ReadUInt64();
+				if (!ID.count(useID)) {
+					QCol->Error("Unknown data ID (" + to_string(useID) + ") in session file. File may be corrupted!");
+				}
+				useName = ID[useID];
+				break;
+			case 3:
+				ret->Files[useName].Aanwijzing = bt->ReadString();
+				break;
+			case 4:
+				ret->Files[useName].IsVirus = (bool)bt->ReadByte();
+				break;
+			case 5:
+				ret->Files[useName].Seen = (bool)bt->ReadByte();
+				break;
+			case 6:
+				ret->Score = (int16)bt->ReadInt();
+				break;
+			case 7:
+				ret->Deleted = (int16)bt->ReadInt();
+				break;
+			case 8:
+				ret->FilesWatched = (int16)bt->ReadInt();
+				break;
+			case 9:
+			{
+				auto u = bt->ReadString();
+				if (u != ret->SessionUser->MyName()) {
+					QCol->Error("This session file isn't yours. It belongs to " + u + ". Trying to cheat?");
+					return nullptr;
+				}
+			} break;
+			default:
+				QCol->Error("Illegal session tag (" + to_string(tag) + ")! Was this session made with a later version of the game, or is your session file corrupted?");
+				return nullptr;
+			}
+		} while (!bt->EndOfFile());
+		bt->Close();
+		QCol->Green("Success!\n");
+		if (!FileDelete(SesFile(User))) {
+			QCol->Error("Sorry! No go if this didn't go right!");
+			return nullptr;
+		}
+		//QCol->Error("Loading sessions not yet implemented");
+		return ret;
 	}
 
 	void TSession::Save() {
+#ifdef DEBUGMODE
+		QCol->Doing("Saving", SesFile());
+#else
 		QCol->Doing("Saving", "Session");
+#endif
 		auto bt = WriteFile(SesFile());
 		bt->Write("Who is the Virus?\x1a",true);
-		map<uint32, File> tmp;
+		map<uint64, File> tmp;
 		for (auto f : Files) {
-			uint64 r; do { r = TRand(4294967200); } while(tmp.count(r));
+			uint64 r; do { r = abs(TRand(65535)); } while(tmp.count(r));
+#ifdef DEBUGMODE
+			cout << "Name \"" << f.second.Stuff.Name() << "\" assinged to ID#" << r << endl;
+#endif
 			tmp[r] = f.second;
 			bt->Write((byte)1);			
 			bt->Write((byte)f.second.Stuff.Boy());
@@ -179,9 +285,10 @@ namespace Virus {
 			bt->Write((byte)5);
 			bt->Write((byte)f.second.Seen);
 		}
-		bt->Write((byte)6); bt->Write(Score);
-		bt->Write((byte)7); bt->Write(Deleted);
-		bt->Write((byte)8); bt->Write(FilesWatched);
+		bt->Write((byte)6); bt->Write((int)Score);
+		bt->Write((byte)7); bt->Write((int)Deleted);
+		bt->Write((byte)8); bt->Write((int)FilesWatched);
+		bt->Write((byte)9); bt->Write(SessionUser->MyName());
 		bt->Write((byte)0);
 		bt->Close();
 		//QCol->Error("Saving sessions not yet implemented");
@@ -255,9 +362,11 @@ namespace Virus {
 				system("clear");
 #endif
 				// Is there really not a BETTER method to do this?
-			} else if (s[0]=="EXIT" && s[0] == "BYE") {
+			} else if (s[0]=="EXIT" || s[0] == "BYE") {
 				Save();
-				exit(0);
+				QCol->Doing("Logging out","Goodbye");
+				QCol->Reset();
+				exit(0); 
 			} else if (Files.count(s[0])) {
 				if (Files[s[0]].IsVirus) {
 					QCol->Color(qColor::Red, qColor::Black);

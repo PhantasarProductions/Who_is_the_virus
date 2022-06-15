@@ -164,6 +164,7 @@
   <ItemGroup>
     <ClInclude Include="..\TrickyUnits\Headers\CheckEndian.hpp" />
     <ClInclude Include="..\TrickyUnits\Headers\Dirry.hpp" />
+    <ClInclude Include="..\TrickyUnits\Headers\QCol.hpp" />
     <ClInclude Include="..\TrickyUnits\Headers\QuickStream.hpp" />
     <ClInclude Include="..\TrickyUnits\Headers\QuickString.hpp" />
     <ClInclude Include="..\TrickyUnits\Headers\QuickTypes.hpp" />
