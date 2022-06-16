@@ -21,7 +21,7 @@
 // Please note that some references to data like pictures or audio, do not automatically
 // fall under this licenses. Mostly this is noted in the respective files.
 // 
-// Version: 22.06.15
+// Version: 22.06.16
 // EndLic
 #include <string>
 #include <QCol.hpp>
@@ -351,7 +351,7 @@ namespace Virus {
 					QCol->Doing("Deleting", s[1]);
 					QCol->Doing("Is virus", "No!");
 					QCol->Write(qColor::Red, "\nToo bad! That was NOT the virus!\n");
-					Score += 100;
+					Score += 10;
 					Deleted++;
 				}
 			} else if (s[0] == "FORFEIT") {
