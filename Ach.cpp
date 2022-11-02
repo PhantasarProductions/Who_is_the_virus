@@ -21,7 +21,7 @@
 // Please note that some references to data like pictures or audio, do not automatically
 // fall under this licenses. Mostly this is noted in the respective files.
 // 
-// Version: 22.06.16
+// Version: 22.11.02
 // EndLic
 
 #include <map>
@@ -49,7 +49,8 @@ namespace Virus {
 		static bool Done{ false };
 		if (Done) return;
 		jcr6::init_JCR6();
-		TrickyMedals::LoadFromInternet();
+		//TrickyMedals::LoadFromInternet();
+		TrickyMedals::LoadFromNothing();
 
 		/*
 Rec: MICHELANGELO
