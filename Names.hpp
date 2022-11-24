@@ -21,8 +21,9 @@
 // Please note that some references to data like pictures or audio, do not automatically
 // fall under this licenses. Mostly this is noted in the respective files.
 // 
-// Version: 22.11.02
+// Version: 22.11.24
 // EndLic
+
 #pragma once
 namespace Virus {
 	static const char
